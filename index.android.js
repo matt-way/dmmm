@@ -1,37 +1,46 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- * @flow
- */
-
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
   AppRegistry,
-  StyleSheet,
-  Text,
-  View,
-  WebView
-} from 'react-native';
+  Navigator,
+  BackAndroid
+} from 'react-native'
+import Player from './app/scenes/Player'
+import SongList from './app/scenes/SongList'
 
-export default class dmmm extends Component {
-  render() {
-    return (
-      <View style={styles.container}>
-        <View style={{height: 200, width: '100%', backgroundColor: 'skyblue'}}>
-          <Text style={styles.welcome}>
-            Welcome to React Native
-          </Text>
-        </View>
-        <WebView
-          source={{uri: 'https://www.youtube.com/embed/PGUMRVowdv8'}}
-          style={styles.video}
-        />
-      </View>
-    );
+let _navigator
+
+BackAndroid.addEventListener('hardwareBackPress', () => {
+  console.log(_navigator.getCurrentRoutes())
+  if (_navigator.getCurrentRoutes().length === 1  ) {
+     return false
   }
+  _navigator.pop()
+  return true
+})
+
+const dmmm = props => {
+
+  return (
+    <Navigator
+      initialRoute={{ id: 'list' }}
+      renderScene={(route, navigator) => {
+        _navigator = navigator
+        if(route.id === 'list'){
+          return <SongList navigator={navigator}/>
+        }else if(route.id === 'player'){
+          return <Player navigator={navigator}/>
+        }
+      }}
+      configureScene={(route, routeStack) =>
+        Navigator.SceneConfigs.VerticalUpSwipeJump}
+      style={{flex:1}}
+    />
+  )
 }
 
-const styles = StyleSheet.create({
+
+
+/*const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
@@ -54,6 +63,6 @@ const styles = StyleSheet.create({
     width: 320,
     flex: 1
   }
-});
+});*/
 
 AppRegistry.registerComponent('dmmm', () => dmmm);
