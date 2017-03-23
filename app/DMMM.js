@@ -1,29 +1,46 @@
-import React from 'react'
+import React, { Component } from 'react'
 import {
+  View,
   Navigator,
-  BackAndroid
+  BackAndroid,
+  StatusBar
 } from 'react-native'
-import Player from './app/scenes/Player'
-import SongList from './app/scenes/SongList'
+import SplashScreen from 'react-native-splash-screen'
+import Player from './scenes/Player'
+import SongList from './scenes/SongList'
 
 let _navigator
 
-const DMMM = props => (
-  <Navigator
-    initialRoute={{ id: 'list' }}
-    renderScene={(route, navigator) => {
-      _navigator = navigator
-      if(route.id === 'list'){
-        return <SongList navigator={navigator}/>
-      }else if(route.id === 'player'){
-        return <Player navigator={navigator}/>
-      }
-    }}
-    configureScene={(route, routeStack) =>
-      Navigator.SceneConfigs.VerticalUpSwipeJump}
-    style={{flex:1}}
-  />
-)
+class DMMM extends Component {
+  componentDidMount() {
+    SplashScreen.hide();
+  }
+
+  render() {
+    return (
+      <View style={{flex: 1, backgroundColor: '#000'}}>
+        <StatusBar
+          backgroundColor="black"
+          barStyle="light-content"
+        />
+        <Navigator
+          initialRoute={{ id: 'list' }}
+          renderScene={(route, navigator) => {
+            _navigator = navigator
+            if(route.id === 'list'){
+              return <SongList navigator={navigator}/>
+            }else if(route.id === 'player'){
+              return <Player navigator={navigator}/>
+            }
+          }}
+          configureScene={(route, routeStack) =>
+            Navigator.SceneConfigs.FloatFromBottom}
+          style={{flex:1}}
+        />
+      </View>
+    )
+  }
+}
 
 BackAndroid.addEventListener('hardwareBackPress', () => {
   console.log(_navigator.getCurrentRoutes())

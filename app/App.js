@@ -6,6 +6,7 @@ import thunk from 'redux-thunk'
 import * as reducers from './reducers'
 import DMMM from './DMMM'
 
+/*
 const createStoreWithMiddleware = applyMiddleware(thunk)(createStore)
 const reducer = combineReducers(reducers)
 const store = createStoreWithMiddleware(reducer)
@@ -18,4 +19,10 @@ export default class App extends Component {
       </Provider>
     )
   }
-}
+}*/
+
+const App = ({ store }) => (
+  <DMMM/>
+)
+
+export default App

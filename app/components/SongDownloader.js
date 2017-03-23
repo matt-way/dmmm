@@ -1,25 +1,26 @@
-import React from 'react'
+import React, { Component } from 'react'
+import { View, Text } from 'react-native'
 
 class SongDownloader extends Component {
 
-  onProgress(data) {
+  /*onProgress(data) {
     setState(data)
   }
 
   onProgress(details) {
     // update the internal state just for progress events
 
-  }
+  }*/
 
   componentDidMount() {
     // start the downloading process
-    startDownloading(this.onProgress)
+    //startDownloading(this.onProgress)
 
 
     // start the downloading process
-    downloader.start(onProgress, onSongCompleted)
+    /*downloader.start(onProgress, onSongCompleted)
       .then(() => this.props.finished())
-      .catch(err =>
+      .catch(err =>*/
 
     // pass in callbacks for song progress or just for an update
   }
@@ -33,4 +34,4 @@ class SongDownloader extends Component {
   }
 }
 
-export default connect()
+export default SongDownloader//connect()

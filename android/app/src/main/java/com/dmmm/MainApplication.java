@@ -3,6 +3,9 @@ package com.dmmm;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import ca.jaysoo.extradimensions.ExtraDimensionsPackage;
+import com.cboy.rn.splashscreen.SplashScreenReactPackage;
+import com.BV.LinearGradient.LinearGradientPackage;
 import com.zmxv.RNSound.RNSoundPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
@@ -26,6 +29,9 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new ExtraDimensionsPackage(),
+            new SplashScreenReactPackage(),
+            new LinearGradientPackage(),
             new RNSoundPackage(),
           new RNFSPackage()
       );

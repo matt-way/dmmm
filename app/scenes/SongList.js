@@ -1,13 +1,18 @@
 import React, { Component } from 'react'
-import { ListView, View, Text } from 'react-native'
+import { ListView, View, Text, StyleSheet } from 'react-native'
+import { connect } from 'react-redux'
+import SongDownloader from 'app/components/SongDownloader'
 import SongTile from 'app/components/SongTile'
+import LinearGradient from 'react-native-linear-gradient'
+//import { loadList } from 'app/modules/songlist/init'
+//import { startSync } from 'app/modules/downloader/actions'
 
 const genDummy = n => {
   const output = []
   for(var i=0; i<n; i++){
     output.push({
-      name: 'some name' + Math.random(),
-      image: 'http://random.cat/view?i=' + Math.floor(Math.random() * 100),
+      name: 'Some Name Test',
+      image: `http://www.phoca.cz/demo/images/phocagallery/shadowbox/thumbs/phoca_thumb_l_alps-${(i%5)+1}.jpg`,
       duration: Math.floor(Math.random() * 200)
     })
   }
@@ -19,22 +24,42 @@ class SongList extends Component {
     super()
     const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2})
     this.state = {
-      dataSource: ds.cloneWithRows(genDummy(20))
+      dataSource: ds.cloneWithRows(genDummy(40))
     }
   }
+
+  /*componentDidMount() {
+    this.props.loadList().then(() => {
+      this.props.startSync()
+    })
+  }*/
 
   render() {
     const { navigator } = this.props
     return (
-      <View style={{flex: 1}}>
-        <Text>Yo</Text>
-        <ListView
-          dataSource={this.state.dataSource}
-          renderRow={song => <SongTile song={song} navigator={navigator}/>}
-        />
-    </View>
+
+        <LinearGradient colors={['#000000', '#333']} style={styles.linearGradient}>
+          <Text>Sticky Please</Text>
+          <ListView
+            dataSource={this.state.dataSource}
+            renderRow={song => <SongTile song={song} navigator={navigator}/>}
+          />
+        </LinearGradient>
+
     )
   }
 }
 
+const styles = StyleSheet.create({
+  linearGradient: {
+    flex: 1
+  }
+})
+
+/*
+export default connect(null, { startSync })(SongList)
+
+export {
+  SongList
+}*/
 export default SongList

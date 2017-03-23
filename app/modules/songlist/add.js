@@ -26,7 +26,11 @@ const addSong = song => dispatch => {
       return AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(newList))
     })
     .then(() => dispatch(songAdded(song)))
-    .catch(err => dispatch(songAddedError(err)))
+    .catch(err => {
+      dispatch(songAddedError(err))
+      // re-reject the error so that parents can deal with it as well
+      return Promise.reject(err)
+    })
 }
 
 const handlers = {

@@ -1,20 +1,25 @@
 import React, { Component } from 'react'
 import RNFS from 'react-native-fs'
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet, Image } from 'react-native'
+import ExtraDimensions from 'react-native-extra-dimensions-android'
 import Sound from 'react-native-sound'
 import Swiper from 'react-native-swiper'
+
+const test = ExtraDimensions.get('SOFT_MENU_BAR_HEIGHT')
+console.log(test)
 
 // Enable playback in silence mode (iOS only)
 Sound.setCategory('Playback')
 
 var styles = StyleSheet.create({
   wrapper: {
+    flex: 1
   },
   slide1: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#9DD6EB',
+    //justifyContent: 'center',
+    //alignItems: 'center',
+    //backgroundColor: '#9DD6EB',
   },
   slide2: {
     flex: 1,
@@ -94,15 +99,23 @@ class Loading extends Component {
         loop={false}
         showsPagination={false}
       >
-        <View style={styles.slide1}>
-          <Text style={styles.text}>Hello Swiper</Text>
+        <View style={{flex:1, marginBottom: test, backgroundColor: '#fff', flexDirection: 'row', alignItems: 'flex-end'}}>
+          <Text>TEST TEXT</Text>
+        </View>
+        {/*}<View style={styles.slide1}>
+          <Image
+            style={{flex: 1, marginBottom: 26, flexDirection: 'row', alignItems: 'flex-end'}}
+            source={{uri: 'http://www.phoca.cz/demo/images/phocagallery/shadowbox/thumbs/phoca_thumb_l_alps-5.jpg'}}
+          >
+            <Text style={styles.text}>Hello Swiper</Text>
+          </Image>
         </View>
         <View style={styles.slide2}>
           <Text style={styles.text}>Beautiful</Text>
         </View>
         <View style={styles.slide3}>
           <Text style={styles.text}>And simple</Text>
-        </View>
+        </View>*/}
       </Swiper>
     )
   }
