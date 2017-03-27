@@ -7,12 +7,12 @@
     "test": "jest"
   },
   "dependencies": {
-    "graphql-client": "^1.1.0",
     "react": "15.4.2",
     "react-native": "0.42.0",
     "react-native-extra-dimensions-android": "^0.20.1",
     "react-native-fs": "^2.1.0-rc.1",
     "react-native-linear-gradient": "^2.0.0",
+    "react-native-progress-bar": "^0.1.2",
     "react-native-sound": "^0.9.1",
     "react-native-splash-screen": "^2.0.0",
     "react-native-swiper": "^1.5.4",

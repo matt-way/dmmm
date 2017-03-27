@@ -12,7 +12,8 @@ const genDummy = n => {
   for(var i=0; i<n; i++){
     output.push({
       name: 'Some Name Test',
-      image: `http://www.phoca.cz/demo/images/phocagallery/shadowbox/thumbs/phoca_thumb_l_alps-${(i%5)+1}.jpg`,
+      //image: `http://www.phoca.cz/demo/images/phocagallery/shadowbox/thumbs/phoca_thumb_l_alps-${(i%5)+1}.jpg`,
+      image: 'http://img.youtube.com/vi/CgYTK2fxHw8/maxresdefault.jpg',
       duration: Math.floor(Math.random() * 200)
     })
   }
@@ -38,12 +39,12 @@ class SongList extends Component {
     const { navigator } = this.props
     return (
 
-        <LinearGradient colors={['#000000', '#333']} style={styles.linearGradient}>
-          <Text>Sticky Please</Text>
+        <LinearGradient colors={['#000', '#000']} style={styles.linearGradient}>
           <ListView
             dataSource={this.state.dataSource}
             renderRow={song => <SongTile song={song} navigator={navigator}/>}
           />
+          <SongDownloader/>
         </LinearGradient>
 
     )

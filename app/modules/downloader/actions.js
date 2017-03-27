@@ -1,5 +1,5 @@
 import RNFS from 'react-native-fs'
-import initClient from 'graphql-client'
+import initClient from 'app/graphql_client'
 import { CHURN_API_URL, AUDIO_API_URL } from 'app/constants'
 import { addSong } from '../songlist/add'
 
@@ -40,8 +40,6 @@ const downloadSongCancel = details => ({
 const downloadSongError = details => ({
   type: DOWNLOAD_SONG_ERROR
 })
-
-
 
 const gqlClient = initClient({
   url: CHURN_API_URL
@@ -179,7 +177,7 @@ const handlers = {
 }
 
 export {
-  startSync,
-  cancelSync,
+  //startSync,
+  //cancelSync,
   handlers
 }
