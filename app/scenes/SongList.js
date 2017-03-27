@@ -3,64 +3,69 @@ import { ListView, View, Text, StyleSheet } from 'react-native'
 import { connect } from 'react-redux'
 import SongDownloader from 'app/components/SongDownloader'
 import SongTile from 'app/components/SongTile'
-import LinearGradient from 'react-native-linear-gradient'
-//import { loadList } from 'app/modules/songlist/init'
-//import { startSync } from 'app/modules/downloader/actions'
-
-const genDummy = n => {
-  const output = []
-  for(var i=0; i<n; i++){
-    output.push({
-      name: 'Some Name Test',
-      //image: `http://www.phoca.cz/demo/images/phocagallery/shadowbox/thumbs/phoca_thumb_l_alps-${(i%5)+1}.jpg`,
-      image: 'http://img.youtube.com/vi/CgYTK2fxHw8/maxresdefault.jpg',
-      duration: Math.floor(Math.random() * 200)
-    })
-  }
-  return output
-}
+import { loadList } from 'app/modules/songlist/init'
+import { startSync } from 'app/modules/downloader/actions'
 
 class SongList extends Component {
   constructor() {
     super()
     const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2})
     this.state = {
-      dataSource: ds.cloneWithRows(genDummy(40))
+      dataSource: ds.cloneWithRows([])
     }
   }
 
-  /*componentDidMount() {
+  componentWillReceiveProps({ songs }) {
+    this.setState({
+      dataSource: this.state.dataSource.cloneWithRows(songs)
+    })
+  }
+
+  componentDidMount() {
     this.props.loadList().then(() => {
       this.props.startSync()
     })
-  }*/
+  }
 
   render() {
-    const { navigator } = this.props
+    const { navigator, songs = [], downloader } = this.props
     return (
-
-        <LinearGradient colors={['#000', '#000']} style={styles.linearGradient}>
+      <View style={styles.listContainer}>
+        {songs.length > 0 ?
           <ListView
             dataSource={this.state.dataSource}
             renderRow={song => <SongTile song={song} navigator={navigator}/>}
-          />
-          <SongDownloader/>
-        </LinearGradient>
-
+          /> :
+          <View style={styles.emptyContainer}>
+            <Text style={styles.emptyText}>No songs have been downloaded.</Text>
+          </View>
+        }
+        {downloader.running && <SongDownloader/>}
+      </View>
     )
   }
 }
 
 const styles = StyleSheet.create({
-  linearGradient: {
-    flex: 1
+  listContainer: {
+    flex: 1,
+    backgroundColor: '#000'
+  },
+  emptyContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  emptyText: {
+    color: '#fff'
   }
 })
 
-/*
-export default connect(null, { startSync })(SongList)
+export default connect(state => ({
+  songs: state.songlist.list,
+  downloader: state.downloader
+}), { loadList, startSync })(SongList)
 
 export {
   SongList
-}*/
-export default SongList
+}

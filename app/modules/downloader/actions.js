@@ -125,6 +125,7 @@ const downloadSong = (song, dispatch) => {
 
 const startSync = mostRecentId => dispatch => {
   dispatch(downloaderStarted())
+  /*
   // using the most recent id in the song list figure out if songs
   // need to be downloaded by querying the api and figuring out the difference
   return getListToAdd(mostRecentId).then(list => {
@@ -141,7 +142,9 @@ const startSync = mostRecentId => dispatch => {
   })
   .catch(err => {
     dispatch(downloaderError(err))
-  })
+  })*/
+
+  setTimeout(() => dispatch(downloaderComplete()), 2000)
 }
 
 const cancelSync = () => dispatch => {
@@ -150,15 +153,15 @@ const cancelSync = () => dispatch => {
 
 // reducer handlers
 const handlers = {
-  [DOWNLOADER_STARTED]: state => {
-
-  },
+  [DOWNLOADER_STARTED]: state => ({
+    running: true
+  }),
   [DOWNLOAD_SONGS_STARTED]: state => {
 
   },
-  [DOWNLOADER_COMPLETE]: state => {
-
-  },
+  [DOWNLOADER_COMPLETE]: state => ({
+    running: false
+  }),
   [DOWNLOAD_SONG_STARTED]: state => {
 
   },
@@ -177,7 +180,7 @@ const handlers = {
 }
 
 export {
-  //startSync,
-  //cancelSync,
+  startSync,
+  cancelSync,
   handlers
 }

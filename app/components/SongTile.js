@@ -11,6 +11,11 @@ import LinearGradient from 'react-native-linear-gradient'
 
 const windowWidth = Dimensions.get('window').width
 
+const durationToString = duration => {
+  const minutes = Math.floor(duration / 60)
+  const seconds = duration - minutes * 60
+  return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`
+}
 
 const SongTile = ({ song, navigator }) => (
   <TouchableHighlight style={styles.tile} onPress={() => navigator.push({ id: 'player' })}>
@@ -29,11 +34,11 @@ const SongTile = ({ song, navigator }) => (
           paddingVertical: 5,
           paddingHorizontal: 10,
           marginBottom: 10
-        }}>THIS IS THE SONG TITLE<Text style={{
+        }}>{song.name}<Text style={{
           color: '#aaa',
           fontStyle: 'italic',
           fontWeight: '100',
-        }}> - 3:05</Text></Text>
+        }}> - {durationToString(song.duration)}</Text></Text>
       {/*}<Text style={{
           backgroundColor: 'rgba(0,0,0,0.3)',
           color: '#bbb',

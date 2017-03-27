@@ -17,6 +17,9 @@ const DMMM = props => (
       barStyle="light-content"
     />
     <Navigator
+      style={{flex:1}}
+      configureScene={(route, routeStack) =>
+        Navigator.SceneConfigs.FloatFromBottom}
       initialRoute={{ id: 'list' }}
       renderScene={(route, navigator) => {
         _navigator = navigator
@@ -26,9 +29,6 @@ const DMMM = props => (
           return <Player navigator={navigator}/>
         }
       }}
-      configureScene={(route, routeStack) =>
-        Navigator.SceneConfigs.FloatFromBottom}
-      style={{flex:1}}
     />
   </View>
 )
@@ -41,30 +41,5 @@ BackAndroid.addEventListener('hardwareBackPress', () => {
   _navigator.pop()
   return true
 })
-
-/*const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
-  video: {
-    marginTop: 20,
-    maxHeight: 200,
-    width: 320,
-    flex: 1
-  }
-});*/
 
 export default DMMM
