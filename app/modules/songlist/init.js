@@ -21,8 +21,10 @@ const listError = error => ({
 // thunk actions
 const loadList = (options = {}) => dispatch => {
   dispatch(listLoading())
+  //AsyncStorage.removeItem(STORAGE_KEY)
   return AsyncStorage.getItem(STORAGE_KEY)
-    .then(() => [
+    .then(JSON.parse)
+    /*.then(() => [
       {
         name: 'First One',
         //image: `http://www.phoca.cz/demo/images/phocagallery/shadowbox/thumbs/phoca_thumb_l_alps-${(i%5)+1}.jpg`,
@@ -35,8 +37,8 @@ const loadList = (options = {}) => dispatch => {
         image: 'http://img.youtube.com/vi/CgYTK2fxHw8/maxresdefault.jpg',
         duration: Math.floor(Math.random() * 200)
       }
-    ])
-    .then(list => dispatch(listLoaded(list)))
+    ])*/
+    .then(list => dispatch(listLoaded(list || [])))
     .catch(err => dispatch(listError(err)))
 }
 

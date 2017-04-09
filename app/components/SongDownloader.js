@@ -1,37 +1,31 @@
 import React, { Component } from 'react'
-import { View, Text, StyleSheet, Dimensions } from 'react-native'
+import {
+  View,
+  Text,
+  StyleSheet,
+  Dimensions,
+  ActivityIndicator
+} from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
-//import ProgressBar from 'react-native-progress-bar'
 
 const windowWidth = Dimensions.get('window').width
 
 class SongDownloader extends Component {
 
-  /*onProgress(data) {
-    setState(data)
-  }
-
-  onProgress(details) {
-    // update the internal state just for progress events
-
-  }*/
-
-  componentDidMount() {
-    // start the downloading process
-    //startDownloading(this.onProgress)
-
-
-    // start the downloading process
-    /*downloader.start(onProgress, onSongCompleted)
-      .then(() => this.props.finished())
-      .catch(err =>*/
-
-    // pass in callbacks for song progress or just for an update
-  }
-
   render() {
-    return (
+    const { downloaderState } = this.props
+    const { song, progressDetails } = downloaderState
+    let downloaderText
+    if(song){
+      downloaderText = `Downloading: ${song.title}`
+    }else{
+      downloaderText = 'Syncing Songlist With Server'
+    }
+    const percent = progressDetails ?
+      progressDetails.received / progressDetails.total :
+      0
 
+    return (
       <View style={{
         backgroundColor:'#f5ebe1',
         height: 60,
@@ -48,34 +42,42 @@ class SongDownloader extends Component {
           colors={['#ad58cc', '#ef5952']}
           style={styles.linearGradient}
         >
-          <Text style={{
+          <Text numberOfLines={1} style={{
             color: '#fff',
             textAlign: 'center',
             fontWeight: '500',
             fontSize: 15,
             marginTop: 6
-          }}>Downloading - This is the song name</Text>
-        <Text style={{
-            color: '#ccc',
-            textAlign: 'center',
-            fontWeight: '500',
-            fontSize: 15,
-            marginTop: 0
-          }}>30%</Text>
-          <View style={{
-            position: 'absolute',
-            height: 5,
-            left: 0,
-            right: 0,
-            bottom: 0,
-          }}>
-            <View style={{
-              backgroundColor: '#fff',
-              width: 0.9 * windowWidth,
-              height: 5
-            }}></View>
-          </View>
-      </LinearGradient>
+          }}>{downloaderText}</Text>
+          {song &&
+            [<Text key="a" style={{
+              color: '#ccc',
+              textAlign: 'center',
+              fontWeight: '500',
+              fontSize: 15,
+              marginTop: 0
+            }}>{Math.floor(percent * 100)}%</Text>,
+            <View key="b" style={{
+              position: 'absolute',
+              height: 5,
+              left: 0,
+              right: 0,
+              bottom: 0,
+            }}>
+              <View style={{
+                backgroundColor: '#fff',
+                width: percent * windowWidth,
+                height: 5
+              }}></View>
+            </View>]
+          }
+          {!song &&
+            <ActivityIndicator
+              animating={true}
+              style={styles.spinner}
+            />
+          }
+        </LinearGradient>
       </View>
     )
   }
@@ -84,6 +86,9 @@ class SongDownloader extends Component {
 const styles = StyleSheet.create({
   linearGradient: {
     flex: 1
+  },
+  spinner: {
+    marginTop: 5
   }
 })
 

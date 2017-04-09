@@ -22,7 +22,8 @@ const addSong = song => dispatch => {
   // do a list replace
   return AsyncStorage.getItem(STORAGE_KEY)
     .then(stringList => {
-      const newList = JSON.parse(stringList).unshift(song)
+      const newList = JSON.parse(stringList) || []
+      newList.unshift(song)
       return AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(newList))
     })
     .then(() => dispatch(songAdded(song)))

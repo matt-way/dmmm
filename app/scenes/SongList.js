@@ -16,15 +16,22 @@ class SongList extends Component {
   }
 
   componentWillReceiveProps({ songs }) {
+    songs = songs || []
     this.setState({
       dataSource: this.state.dataSource.cloneWithRows(songs)
     })
   }
 
   componentDidMount() {
-    this.props.loadList().then(() => {
-      this.props.startSync()
-    })
+    this.props.loadList()
+      .then(() => {
+        const { songs } = this.props
+        const id = songs.length > 0 ? songs[0].youtube_id : undefined
+        this.props.startSync(id)
+      })
+      .catch(err => {
+        console.log(err)
+      })
   }
 
   render() {
@@ -40,7 +47,7 @@ class SongList extends Component {
             <Text style={styles.emptyText}>No songs have been downloaded.</Text>
           </View>
         }
-        {downloader.running && <SongDownloader/>}
+        {downloader.running && <SongDownloader downloaderState={downloader}/>}
       </View>
     )
   }

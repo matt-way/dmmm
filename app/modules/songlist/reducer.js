@@ -1,7 +1,9 @@
 import { handlers as initHandlers } from './init'
 import { handlers as addHandlers } from './add'
 
-const initialState = {}
+const initialState = {
+  list: []
+}
 
 const handlers = {
   ...initHandlers,

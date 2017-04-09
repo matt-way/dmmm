@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import RNFS from 'react-native-fs'
 import { View, Text, StyleSheet, Image } from 'react-native'
 import ExtraDimensions from 'react-native-extra-dimensions-android'
 import Sound from 'react-native-sound'
@@ -47,7 +46,6 @@ class Loading extends Component {
     }, 2000)*/
 
     const id = 'EF_WKwbueG8'
-    const path = RNFS.DocumentDirectoryPath
 
     /*
     const result = RNFS.downloadFile({
