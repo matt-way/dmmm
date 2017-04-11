@@ -7,6 +7,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "jumpstate": "^2.2.2",
     "react": "15.4.2",
     "react-native": "0.42.0",
     "react-native-extra-dimensions-android": "^0.20.1",
