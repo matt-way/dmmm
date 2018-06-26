@@ -29,7 +29,9 @@ class App extends Component {
     store.dispatch(init()).then(() => {
       // run downloader check after initial load, but just run
       // async to regular process
-      store.dispatch(downloadCheck())
+      if(!store.getState().downloader.running){
+        store.dispatch(downloadCheck())
+      }
     })
   }
 
