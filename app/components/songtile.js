@@ -58,23 +58,29 @@ const durationToString = duration => {
   return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`
 }
 
-const SongTile = ({ song, active, playPause, currentTime }) => (
-  <TouchableOpacity onPress={() => playPause(song)}>
-    <View style={styles.container}>
-      <Image 
-        style={[styles.art, active ? styles.artSelected : {}]}
-        source={{uri: `https://img.youtube.com/vi/${song.youtube_id}/hqdefault.jpg` }}
-      />
-      <LinearGradient
-        style={styles.textContainer}
-        start={{x: 0.0, y: 0.0}} end={{x: 1.0, y: 0.0}}
-        colors={[active ? THEME.selected : THEME.dark, '#24201F']}
-      >
-        <Text style={[styles.titleText]}>{song.title}</Text>
-        <Text style={styles.durationText}>{`${active ? durationToString(currentTime) + '/' : ''}${durationToString(song.duration)}`}</Text>
-      </LinearGradient>
-    </View>
-  </TouchableOpacity>
-)
+class SongTile extends React.PureComponent {
+  render() {
+    const { song, active, playPause, currentTime } = this.props
+
+    return (
+      <TouchableOpacity onPress={() => playPause(song)}>
+      <View style={styles.container}>
+        <Image 
+          style={[styles.art, active ? styles.artSelected : {}]}
+          source={{uri: `https://img.youtube.com/vi/${song.youtube_id}/hqdefault.jpg` }}
+        />
+        <LinearGradient
+          style={styles.textContainer}
+          start={{x: 0.0, y: 0.0}} end={{x: 1.0, y: 0.0}}
+          colors={[active ? THEME.selected : THEME.dark, '#24201F']}
+        >
+          <Text style={[styles.titleText]}>{song.title}</Text>
+          <Text style={styles.durationText}>{`${active ? durationToString(currentTime) + '/' : ''}${durationToString(song.duration)}`}</Text>
+        </LinearGradient>
+      </View>
+    </TouchableOpacity>
+    )
+  }
+}
 
 export default SongTile

@@ -28,39 +28,42 @@ const styles = StyleSheet.create({
   }
 })
 
-const SongList = ({ songs, player, loading, playPause }) => {
-  
-  // hide any invalidsongs
-  var showSongs = []
-  if(songs){
-    showSongs = songs.filter(s => s.valid)
-  }
+class SongList extends React.PureComponent {
+  render() {
+    const { songs, player, loading, playPause } = this.props
 
-  return (
-    <View style={styles.listContainer}>
-      {showSongs.length > 0
-        ? <FlatList
-            data={showSongs}
-            renderItem={
-              ({item}) => <SongTile 
-                song={item} 
-                active={player.song && item.id === player.song.id} 
-                playPause={playPause}
-                currentTime={player.currentTime}
-              />
-            }
-            extraData={player}
-            keyExtractor={item => item.id}
-          />
-        : <View style={styles.emptyContainer}>
-            {loading
-              ? <ActivityIndicator animating={true}/>
-              : <Text style={styles.emptyText}>No songs have been downloaded.</Text>
-            }          
-          </View>
-      }
-    </View>
-  )
+    // hide any invalidsongs
+    var showSongs = []
+    if(songs){
+      showSongs = songs.filter(s => s.valid)
+    }
+
+    return (
+      <View style={styles.listContainer}>
+        {showSongs.length > 0
+          ? <FlatList
+              data={showSongs}
+              renderItem={
+                ({item}) => <SongTile 
+                  song={item} 
+                  active={player.song && item.id === player.song.id} 
+                  playPause={playPause}
+                  currentTime={(player.song && item.id === player.song.id) ? player.currentTime : 0}
+                />
+              }
+              extraData={player}
+              keyExtractor={item => item.id}
+            />
+          : <View style={styles.emptyContainer}>
+              {loading
+                ? <ActivityIndicator animating={true}/>
+                : <Text style={styles.emptyText}>No songs have been downloaded.</Text>
+              }          
+            </View>
+        }
+      </View>
+    )
+  }
 }
 
 const enhance = connect(({ songlist, player }) => ({

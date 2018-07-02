@@ -94,7 +94,7 @@ class Controls extends React.Component {
           }else{
             Animated.timing(this.state.widthAnim, {
               toValue: 240,
-              duration: 300,
+              duration: 200,
             }).start(() => {
               openMenu()
             })
