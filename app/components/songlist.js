@@ -28,31 +28,40 @@ const styles = StyleSheet.create({
   }
 })
 
-const SongList = ({ songs, player, loading, playPause }) => (
-  <View style={styles.listContainer}>
-    {songs.length > 0
-      ? <FlatList
-          data={songs}
-          renderItem={
-            ({item}) => <SongTile 
-              song={item} 
-              active={player.song && item.id === player.song.id} 
-              playPause={playPause}
-              currentTime={player.currentTime}
-            />
-          }
-          extraData={player}
-          keyExtractor={item => item.id}
-        />
-      : <View style={styles.emptyContainer}>
-          {loading
-            ? <ActivityIndicator animating={true}/>
-            : <Text style={styles.emptyText}>No songs have been downloaded.</Text>
-          }          
-        </View>
-    }
-  </View>
-)
+const SongList = ({ songs, player, loading, playPause }) => {
+  
+  // hide any invalidsongs
+  var showSongs = []
+  if(songs){
+    showSongs = songs.filter(s => s.valid)
+  }
+
+  return (
+    <View style={styles.listContainer}>
+      {showSongs.length > 0
+        ? <FlatList
+            data={showSongs}
+            renderItem={
+              ({item}) => <SongTile 
+                song={item} 
+                active={player.song && item.id === player.song.id} 
+                playPause={playPause}
+                currentTime={player.currentTime}
+              />
+            }
+            extraData={player}
+            keyExtractor={item => item.id}
+          />
+        : <View style={styles.emptyContainer}>
+            {loading
+              ? <ActivityIndicator animating={true}/>
+              : <Text style={styles.emptyText}>No songs have been downloaded.</Text>
+            }          
+          </View>
+      }
+    </View>
+  )
+}
 
 const enhance = connect(({ songlist, player }) => ({
   loading: songlist.loading,

@@ -109,7 +109,9 @@ const playPause = song => (dispatch, getState) => {
       audioSingleton.pause()
     }else{
       dispatch(actions.play())
-      audioSingleton.play()
+      playAudio().then(() => {
+        dispatch(nextSong())
+      })
     }
     return
   }else{
@@ -139,7 +141,7 @@ const randArrayItem = arr => arr[Math.floor(Math.random() * arr.length)]
 
 const nextSong = () => (dispatch, getState) => {
   const { player, songlist } = getState()
-  const songs = songlist.songs
+  const songs = songlist.songs.filter(s => s.valid)
 
   if(songs.length > 1){
     if(player.shuffle){

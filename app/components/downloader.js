@@ -39,9 +39,7 @@ const styles = StyleSheet.create({
   }
 })
 
-const Downloader = ({ song, received, total }) => {
-  console.log(song)
-  return(
+const Downloader = ({ song, received, total }) => (
   <LinearGradient 
     start={{x: 0.0, y: 0.0}} end={{x: 1.0, y: 0.0}}
     colors={['#ad58cc', '#ef5952']}
@@ -53,7 +51,7 @@ const Downloader = ({ song, received, total }) => {
       : <ActivityIndicator animating={true} style={styles.spinner}/>
     }
   </LinearGradient>
-)}
+)
 
 const enhance = connect(({ downloader }) => ({
   received: downloader.received,

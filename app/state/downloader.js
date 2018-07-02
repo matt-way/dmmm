@@ -46,8 +46,8 @@ const { actions, reducer } = createModel('DOWNLOADER', initialState, {
 
 const promiseQuestion = () => new Promise((resolve, reject) => {
   Alert.alert(
-    'New Songs Found',
-    'There are songs in the playlist you haven\'t downloaded yet.\n\nWould you like to download them now?',
+    'Check for song updates?',
+    'Would you like to download any new songs if they are available?',
     [
       { text: 'No', onPress: () => resolve(false), style: 'cancel' },
       { text: 'Yes', onPress: () => resolve(true) },
@@ -65,14 +65,17 @@ const downloadArt = song => dispatch => {
 }
 
 const downloadAudio = song => dispatch => {
+  const filename = `${DIRS.DocumentDir}/${song.youtube_id}.mp3`
   return RNFetchBlob
     .config({
-      path: `${DIRS.DocumentDir}/${song.youtube_id}.mp3`
+      path: filename
     })
     .fetch('GET', `${AUDIO_API_URL}${song.youtube_id}`, {})
     .progress((received, total) => {
       dispatch(actions.songProgress(received, total))
     })
+    .then(() => RNFetchBlob.fs.stat(filename))
+    .then(({ size }) => size > (1024 * 100))
 }
 
 const downloadSong = (id, song, previousId) => (dispatch, getState) => {
@@ -81,7 +84,8 @@ const downloadSong = (id, song, previousId) => (dispatch, getState) => {
   // do song download and progress
   return dispatch(downloadArt(song))
     .then(() => dispatch(downloadAudio(song)))
-    .then(() => {
+    .then(success => {
+      song.valid = success
       dispatch(addSong(id, song, previousId))
       dispatch(actions.songComplete())
     })
@@ -96,28 +100,27 @@ const downloadCheck = () => (dispatch, getState) => {
       const { songs } = getState().songlist
       const allIds = Object.keys(allSongs).reverse()
       
-      // assume songs cant be deleted so simply check for length
-      // mismatch to indicate new songs
-      if(allIds.length !== songs.length){
-        return promiseQuestion().then(shouldDownload => {
-          if(shouldDownload){
-            dispatch(actions.started())
-            // go through each song in the correct order,
-            // setting up downloading info
-            var chain = Promise.resolve()
-            allIds.forEach((id, index) => {
-              if(songs.findIndex(s => s.id === id) < 0){
-                chain = chain.then(() => {
-                  const previousId = index > 0 ? allIds[index - 1] : null
-                  return dispatch(downloadSong(id, allSongs[id], previousId))
-                })
-              }
-            })
-            chain.then(() => dispatch(actions.complete()))
-            return chain
-          }
-        })
-      }
+      return promiseQuestion().then(shouldDownload => {
+        if(shouldDownload){
+          dispatch(actions.started())
+          // go through each song in the correct order,
+          // setting up downloading info
+          var chain = Promise.resolve()
+          allIds.forEach((id, index) => {
+            const findSong = songs.find(s => s.id === id)
+
+            // if song is missing or invalid attempt a download
+            if(!findSong || !findSong.valid){
+              chain = chain.then(() => {
+                const previousId = index > 0 ? allIds[index - 1] : null
+                return dispatch(downloadSong(id, allSongs[id], previousId))
+              })
+            }
+          })
+          chain.then(() => dispatch(actions.complete()))
+          return chain
+        }
+      })
     })
 }
 
