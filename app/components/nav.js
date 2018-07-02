@@ -4,6 +4,7 @@ import {
   View,
   Text
 } from 'react-native'
+import { connect } from 'react-redux'
 import Controls from './controls'
 import SongList from './songlist'
 import Downloader from './downloader'
@@ -17,7 +18,7 @@ const styles = StyleSheet.create({
   }
 })
 
-const Nav = ({ menuOpen, openMenu, closeMenu, downloading }) => (
+const Nav = ({ downloading }) => (
   <View style={styles.container}>
     <SongList/>
     <Controls/>
@@ -27,4 +28,8 @@ const Nav = ({ menuOpen, openMenu, closeMenu, downloading }) => (
   </View>
 )
 
-export default Nav
+const enhance = connect(({ downloader }) => ({
+  downloading: downloader.running
+}))
+
+export default enhance(Nav)
