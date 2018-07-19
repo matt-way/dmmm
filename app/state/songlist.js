@@ -1,5 +1,5 @@
 import { AsyncStorage } from 'react-native'
-import { SONGS_URL, STORAGE_KEY } from '../constants'
+import { STORAGE_KEY } from '../constants'
 import { createModel } from '../utils/redux-helpers'
 
 const initialState = {

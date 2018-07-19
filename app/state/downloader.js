@@ -5,7 +5,7 @@ import {
 import RNFetchBlob from 'rn-fetch-blob'
 import getInfo from '../ytdl/info'
 import { chooseFormat } from '../ytdl/util'
-import { SONGS_URL, AUDIO_API_URL } from '../constants'
+import { SONGS_URL } from '../constants'
 
 import { createModel } from '../utils/redux-helpers'
 import { addSong } from './songlist'
@@ -67,13 +67,15 @@ const downloadArt = song => dispatch => {
     .fetch('GET', `https://img.youtube.com/vi/${song.youtube_id}/hqdefault.jpg`, {})
 }
 
-//const getDownloadLink = youtubeId => Promise.resolve(`${AUDIO_API_URL}${song.youtube_id}`)
 const getDownloadLink = youtubeId => {
   const url = `http://www.youtube.com/watch?v=${youtubeId}`
-  return getInfo(url).then(info => {
-    const format = chooseFormat(info.formats, {
+  return getInfo(url).then((info = {}) => {
+    const format = chooseFormat(info.formats || {}, {
       filter: 'audioonly'
     })
+    if(!format){
+      throw 'No format found.'
+    }
     return format.url
   })
 }
@@ -102,6 +104,12 @@ const downloadSong = (id, song, previousId) => (dispatch, getState) => {
     .then(() => dispatch(downloadAudio(song)))
     .then(success => {
       song.valid = success
+      dispatch(addSong(id, song, previousId))
+      dispatch(actions.songComplete())
+    })
+    .catch(err => {
+      // still add the song, just put it in an invalid state (for ordering)
+      song.valid = false
       dispatch(addSong(id, song, previousId))
       dispatch(actions.songComplete())
     })
