@@ -2,8 +2,11 @@
 import {
   Alert
 } from 'react-native'
-import { SONGS_URL, AUDIO_API_URL } from '../constants'
 import RNFetchBlob from 'rn-fetch-blob'
+import getInfo from '../ytdl/info'
+import { chooseFormat } from '../ytdl/util'
+import { SONGS_URL, AUDIO_API_URL } from '../constants'
+
 import { createModel } from '../utils/redux-helpers'
 import { addSong } from './songlist'
 
@@ -64,18 +67,31 @@ const downloadArt = song => dispatch => {
     .fetch('GET', `https://img.youtube.com/vi/${song.youtube_id}/hqdefault.jpg`, {})
 }
 
+//const getDownloadLink = youtubeId => Promise.resolve(`${AUDIO_API_URL}${song.youtube_id}`)
+const getDownloadLink = youtubeId => {
+  const url = `http://www.youtube.com/watch?v=${youtubeId}`
+  return getInfo(url).then(info => {
+    const format = chooseFormat(info.formats, {
+      filter: 'audioonly'
+    })
+    return format.url
+  })
+}
+
 const downloadAudio = song => dispatch => {
   const filename = `${DIRS.DocumentDir}/${song.youtube_id}.mp3`
-  return RNFetchBlob
-    .config({
-      path: filename
-    })
-    .fetch('GET', `${AUDIO_API_URL}${song.youtube_id}`, {})
-    .progress((received, total) => {
-      dispatch(actions.songProgress(received, total))
-    })
-    .then(() => RNFetchBlob.fs.stat(filename))
-    .then(({ size }) => size > (1024 * 100))
+  return getDownloadLink(song.youtube_id).then(url => {
+    return RNFetchBlob
+      .config({
+        path: filename
+      })
+      .fetch('GET', url, {})
+      .progress((received, total) => {
+        dispatch(actions.songProgress(received, total))
+      })
+      .then(() => RNFetchBlob.fs.stat(filename))
+      .then(({ size }) => size > (1024 * 100))
+  })
 }
 
 const downloadSong = (id, song, previousId) => (dispatch, getState) => {
