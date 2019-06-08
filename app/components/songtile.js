@@ -1,13 +1,8 @@
-import React, { Component } from 'react'
-import {
-  View,
-  Text,
-  Image,
-  TouchableOpacity,
-  StyleSheet
-} from 'react-native'
+import React from 'react'
+import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
 import { THEME } from '../constants'
+import { durationToString } from '../utils/time'
 
 const styles = StyleSheet.create({
   container: {
@@ -52,33 +47,32 @@ const styles = StyleSheet.create({
   }
 })
 
-const durationToString = duration => {
-  const minutes = Math.floor(duration / 60)
-  const seconds = duration - minutes * 60
-  return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`
-}
-
 class SongTile extends React.PureComponent {
   render() {
     const { song, active, playPause, currentTime } = this.props
 
     return (
       <TouchableOpacity onPress={() => playPause(song)}>
-      <View style={styles.container}>
-        <Image 
-          style={[styles.art, active ? styles.artSelected : {}]}
-          source={{uri: `https://img.youtube.com/vi/${song.youtube_id}/hqdefault.jpg` }}
-        />
-        <LinearGradient
-          style={styles.textContainer}
-          start={{x: 0.0, y: 0.0}} end={{x: 1.0, y: 0.0}}
-          colors={[active ? THEME.selected : THEME.dark, '#24201F']}
-        >
-          <Text style={[styles.titleText]}>{song.title}</Text>
-          <Text style={styles.durationText}>{`${active ? durationToString(currentTime) + '/' : ''}${durationToString(song.duration)}`}</Text>
-        </LinearGradient>
-      </View>
-    </TouchableOpacity>
+        <View style={styles.container}>
+          <Image
+            style={[styles.art, active ? styles.artSelected : {}]}
+            source={{
+              uri: `https://img.youtube.com/vi/${song.youtube_id}/hqdefault.jpg`
+            }}
+          />
+          <LinearGradient
+            style={styles.textContainer}
+            start={{ x: 0.0, y: 0.0 }}
+            end={{ x: 1.0, y: 0.0 }}
+            colors={[active ? THEME.selected : THEME.dark, '#24201F']}
+          >
+            <Text style={styles.titleText}>{song.title}</Text>
+            <Text style={styles.durationText}>{`${
+              active ? durationToString(currentTime) + '/' : ''
+            }${durationToString(song.duration)}`}</Text>
+          </LinearGradient>
+        </View>
+      </TouchableOpacity>
     )
   }
 }

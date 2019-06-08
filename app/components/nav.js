@@ -1,9 +1,5 @@
-import React, { Component } from 'react'
-import {
-  StyleSheet,
-  View,
-  Text
-} from 'react-native'
+import React from 'react'
+import { StyleSheet, View } from 'react-native'
 import { connect } from 'react-redux'
 import Controls from './controls'
 import SongList from './songlist'
@@ -20,10 +16,10 @@ const styles = StyleSheet.create({
 
 const Nav = ({ downloading }) => (
   <View style={styles.container}>
-    <SongList/>
-    <Controls/>
+    <SongList />
+    <Controls />
     <Conditional if={downloading}>
-      <Downloader/>
+      <Downloader />
     </Conditional>
   </View>
 )
