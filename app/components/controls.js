@@ -52,7 +52,8 @@ const styles = StyleSheet.create({
     left: 0,
     bottom: 6,
     height: 40,
-    width: 200
+    width: 200,
+    paddingLeft: 4
   },
   icons: {
     padding: 6
