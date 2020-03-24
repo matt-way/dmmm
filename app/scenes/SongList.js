@@ -1,10 +1,9 @@
 import React, { Component } from 'react'
+import { Actions } from 'jumpstate'
 import { ListView, View, Text, StyleSheet } from 'react-native'
 import { connect } from 'react-redux'
-import SongDownloader from 'app/components/SongDownloader'
-import SongTile from 'app/components/SongTile'
-import { loadList } from 'app/modules/songlist/init'
-import { startSync } from 'app/modules/downloader/actions'
+import SongDownloader from '../components/SongDownloader'
+import SongTile from '../components/SongTile'
 
 class SongList extends Component {
   constructor() {
@@ -15,33 +14,41 @@ class SongList extends Component {
     }
   }
 
-  componentWillReceiveProps({ songs }) {
-    songs = songs || []
-    this.setState({
-      dataSource: this.state.dataSource.cloneWithRows(songs)
-    })
+  componentWillReceiveProps({ songs, player }) {
+    console.log('in thingo')
+    console.log(player)
+    if(songs !== this.props.songs || this.props.player !== player){
+      songs = songs || []
+      this.setState({
+        dataSource: this.state.dataSource.cloneWithRows(songs)
+      })
+    }
   }
 
   componentDidMount() {
-    this.props.loadList()
-      .then(() => {
+    Actions.loadList()
+      /*.then(() => {
         const { songs } = this.props
         const id = songs.length > 0 ? songs[0].youtube_id : undefined
-        this.props.startSync(id)
+        Actions.startSync(id)
       })
       .catch(err => {
         console.log(err)
-      })
+      })*/
   }
 
   render() {
-    const { navigator, songs = [], downloader } = this.props
+    const { navigator, songs = [], downloader, player } = this.props
     return (
       <View style={styles.listContainer}>
         {songs.length > 0 ?
           <ListView
             dataSource={this.state.dataSource}
-            renderRow={song => <SongTile song={song} navigator={navigator}/>}
+            renderRow={song => {
+              console.log('rendering row')
+              console.log(song)
+              return <SongTile song={song} playing={player.meta && song.youtube_id === player.meta.youtube_id} navigator={navigator}/>
+            }}
           /> :
           <View style={styles.emptyContainer}>
             <Text style={styles.emptyText}>No songs have been downloaded.</Text>
@@ -69,9 +76,10 @@ const styles = StyleSheet.create({
 })
 
 export default connect(state => ({
-  songs: state.songlist.list,
-  downloader: state.downloader
-}), { loadList, startSync })(SongList)
+    songs: state.songlist.list,
+    downloader: state.downloader,
+    player: state.player
+}))(SongList)
 
 export {
   SongList

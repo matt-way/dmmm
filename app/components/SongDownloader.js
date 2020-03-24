@@ -14,16 +14,18 @@ class SongDownloader extends Component {
 
   render() {
     const { downloaderState } = this.props
-    const { song, progressDetails } = downloaderState
+    const { song, received, total, downloadingArt } = downloaderState
     let downloaderText
     if(song){
-      downloaderText = `Downloading: ${song.title}`
+      if(downloadingArt){
+        downloaderText = `Downloading (Art): ${song.title}`
+      }else{
+        downloaderText = `Downloading: ${song.title}`
+      }
     }else{
       downloaderText = 'Syncing Songlist With Server'
     }
-    const percent = progressDetails ?
-      progressDetails.received / progressDetails.total :
-      0
+    const percent = received / total
 
     return (
       <View style={{
@@ -47,7 +49,8 @@ class SongDownloader extends Component {
             textAlign: 'center',
             fontWeight: '500',
             fontSize: 15,
-            marginTop: 6
+            marginTop: 6,
+            paddingHorizontal: 10
           }}>{downloaderText}</Text>
           {song &&
             [<Text key="a" style={{
@@ -92,4 +95,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default SongDownloader//connect()
+export default SongDownloader

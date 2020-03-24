@@ -1,14 +1,16 @@
 import React, { Component } from 'react'
 import { createStore, applyMiddleware, combineReducers } from 'redux'
 import { Provider } from 'react-redux'
-import thunk from 'redux-thunk'
+//import thunk from 'redux-thunk'
 import SplashScreen from 'react-native-splash-screen'
-import * as reducers from './reducers'
+import reducers from './reducers'
 import DMMM from './DMMM'
+import { CreateJumpstateMiddleware } from 'jumpstate'
 
-const createStoreWithMiddleware = applyMiddleware(thunk)(createStore)
-const reducer = combineReducers(reducers)
-const store = createStoreWithMiddleware(reducer)
+const store = createStore(
+  combineReducers(reducers),
+  applyMiddleware(CreateJumpstateMiddleware())
+)
 
 class App extends Component {
   componentDidMount() {

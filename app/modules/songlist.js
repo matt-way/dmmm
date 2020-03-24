@@ -49,7 +49,6 @@ const SongList = State('songlist', {
 
 Effect('loadList', (options = {}) => {
   SongList.listLoading()
-  //AsyncStorage.removeItem(STORAGE_KEY)
   return AsyncStorage.getItem(STORAGE_KEY)
     .then(JSON.parse)
     /*.then(() => [
@@ -74,7 +73,8 @@ Effect('addSong', song => {
   SongList.songAdding()
   return AsyncStorage.getItem(STORAGE_KEY)
     .then(JSON.parse)
-    .then((list = []) => {
+    .then(list => {
+      if(!list) { list = [] }
       list.unshift(song)
       return AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(list))
     })

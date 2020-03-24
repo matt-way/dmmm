@@ -1,7 +1,9 @@
-import downloader from './modules/downloader/reducer'
-import songlist from './modules/songlist/reducer'
+import downloader from './modules/downloader'
+import songlist from './modules/songlist'
+import player from './modules/player'
 
-export {
+export default {
   downloader,
-  songlist
+  songlist,
+  player
 }
